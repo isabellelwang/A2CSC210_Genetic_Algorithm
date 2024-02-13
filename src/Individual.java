@@ -74,31 +74,38 @@ public class Individual {
     // fill in
     int randomParent1 = 0; 
     int randomParent2 = 0;  
+
+    //random generates number of characters included in offspring
     while(randomParent1 == 0 || randomParent2 == 0) {
-      // randomParent1 = (int)((Math.random() * parent1.chromosome.size()) + 0); 
-      // randomParent2 = (int)((Math.random() * parent2.chromosome.size()) + 0); 
       randomParent1 = ThreadLocalRandom.current().nextInt(1, parent1.chromosome.size() + 1);
       randomParent2 = ThreadLocalRandom.current().nextInt(1, parent2.chromosome.size() + 1);
     }
-    // int randomParent1 = ThreadLocalRandom.current().nextInt(1, parent1.chromosome.size() + 1);
-    // int randomParent2 = ThreadLocalRandom.current().nextInt(1, parent2.chromosome.size() + 1);
 
     chromosome = new ArrayList<>();
-
+    
+    //iterates through the randoParent and adds to chromosomes
     for (int i = 0; i < randomParent1; i++) {
+
       chromosome.add(parent1.chromosome.get(i));
+
+      //checks if mutated and changes chromosome if true
       if (doesMutate((float) m)) {
         this.chromosome.set(i, randomLetter(5));
       }
     }
 
+    //iterates through parent 2 and adds to chromosome 
     for (int i = 0; i < randomParent2; i++) {
+
       this.chromosome.add((parent2.chromosome.get(i)));
+
+      //checks if mutated and changes chromosome if true
       if (doesMutate((float) m)) {
         this.chromosome.set(i, randomLetter(5));
       }
     }
 
+    //removes last chromosome letters if length of chromosome exceeds the max
     while(chromosome.size() >= c_max) {
       chromosome.remove(chromosome.size() - 1);
     }
@@ -112,6 +119,7 @@ public class Individual {
   public int getFitness() {
     int fitnessCount = 0;
 
+    //iterates through chromosome.size/2 (plus one if size is odd) and increments/decrements the fitness count
     for (int i = 0; i < Math.round(chromosome.size() / 2.0); i++) {
       if ((chromosome.get(i)).equals(chromosome.get(chromosome.size() - 1 - i))) {
         fitnessCount++;
@@ -120,6 +128,7 @@ public class Individual {
       }
     }
 
+    //decrease fitness if adjacent chromosomes are the same
     for (int i = 0; i < chromosome.size() - 1; i++) {
       if (chromosome.get(i).equals(chromosome.get(i + 1))) {
         fitnessCount--;
@@ -128,7 +137,8 @@ public class Individual {
     }
     return fitnessCount;
   }
-
+  
+  //testing the methods
   public static void main(String[] args) {
     Individual parent1 = new Individual(8, 5);
     Individual parent2 = new Individual(8, 5);
