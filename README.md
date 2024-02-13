@@ -11,5 +11,6 @@ If you have a selfie of your TA Hours Study Group, include it here!
 References Used: Online Javadoc 
 
 Brief summary of what you observed about your genetic algorithm:
+The genetic alorigthm iterates 100 times. The fittess level is often 
 
 Reflection on your experience with this assignment:

@@ -1,6 +1,7 @@
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.lang.Math;
 
 public class GA_Simulation {
 
@@ -42,8 +43,9 @@ public class GA_Simulation {
   }
 
   /**
+   * adds indidividuals to a population arraylist
    * 
-   * @param pop
+   * @param pop Arraylist of numGeneration of individuals 
    */
   public void init(ArrayList<Individual> pop) {
     for (int i = 0; i < numGeneration; i++) {
@@ -68,43 +70,58 @@ public class GA_Simulation {
     pop.sort(ranker);
   }
 
+  /**
+   * 
+   * 
+   * @param pop
+   * @return
+   */
   public ArrayList<Individual> evolve(ArrayList<Individual> pop) {
     ArrayList<Individual> newGen = new ArrayList<>();
+    
     for (int i = 0; i < numGeneration; i++) {
       rankPopulation(pop);
       while (pop.size() > numWinners) {
         pop.remove(pop.size() - 1);
       }
-      int parentIndex1 = ThreadLocalRandom.current().nextInt(0, numWinners);
-      int parentIndex2 = ThreadLocalRandom.current().nextInt(0, numWinners);
+      
+      int parentIndex1 = (int) (Math.random() * numWinners + 0);
+      int parentIndex2 = (int) (Math.random() * numWinners + 0);
       newGen.add(new Individual(pop.get(parentIndex1), pop.get(parentIndex2), chromosomeMax, chanceOfMutation));
     }
     return newGen;
   }
 
-  // Specifically, show the fitness of the fittest individual in the generation,
-  // the ***k***th individual, and the least fit (last ranking) individual,
-  // along with the actual chromosome of the best individual.
   public void describeGeneration(ArrayList<Individual> pop) {
     rankPopulation(pop);
-    System.out.println("The fittess level of the fittest individual in this generation is " + pop.get(0).getFitness());
-    System.out.println("The " + numWinners + "th winner's fitness level is " + pop.get(numWinners).getFitness());
-    System.out.println("The least fit inidividual's fitness level is " + pop.get(pop.size() - 1).getFitness());
-    System.out.println("The chromosome of the best individual is " + pop.get(0));
-
+    System.out.println("The fittess level of the fittest individual in the new generation is " + pop.get(0).getFitness() + ". ");
+    System.out.println("The " + numWinners + "th winner's fitness level is " + pop.get(numWinners).getFitness() + ".");
+    System.out.println("The chromosome of the " + numWinners + "th individual is " + pop.get(numWinners) + ".");
+    System.out.println("The least fit inidividual's fitness level is " + pop.get(pop.size() - 1).getFitness() + ".");
+    System.out.println("The least fit individual's chromosome is " + pop.get(pop.size()-1) + ".");
+    System.out.println("The chromosome of the best individual is " + pop.get(0) + ".");
   }
 
-  // first it will initialize the population, rank it, and
-  // describe it. Then, for each round, it will evolve the population,
-  // rank it, and describe it.
+  /**
+   * runs the simulation game, creates a generaton and evolves it for number of
+   * evolution rounds and describes the generation
+   * 
+   * @param gen Simulation of the game
+   */
   public void run(GA_Simulation gen) {
     ArrayList<Individual> originGen = new ArrayList<>();
+
     gen.init(originGen);
+    gen.rankPopulation(originGen);
+
     for (int i = 1; i < evolutionRounds + 1; i++) {
       System.out.println("Evolution round " + i + ": ");
-      gen.rankPopulation(originGen);
-      gen.describeGeneration(gen.evolve(originGen));
-
+      //System.out.println("Original: " + originGen);
+      ArrayList<Individual> newGen = gen.evolve(originGen);
+      //System.out.println("new: " + newGen);
+      originGen = newGen;
+      gen.describeGeneration(newGen);
+      //System.out.println("new:" + newGen);
       System.out.println();
     }
   }

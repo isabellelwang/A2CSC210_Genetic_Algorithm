@@ -72,29 +72,35 @@ public class Individual {
    */
   public Individual(Individual parent1, Individual parent2, int c_max, double m) {
     // fill in
-    int randomParent1 = ThreadLocalRandom.current().nextInt(1, parent1.chromosome.size() + 1);
-    int randomParent2 = ThreadLocalRandom.current().nextInt(1, parent2.chromosome.size() + 1);
+    int randomParent1 = 0; 
+    int randomParent2 = 0;  
+    while(randomParent1 == 0 || randomParent2 == 0) {
+      // randomParent1 = (int)((Math.random() * parent1.chromosome.size()) + 0); 
+      // randomParent2 = (int)((Math.random() * parent2.chromosome.size()) + 0); 
+      randomParent1 = ThreadLocalRandom.current().nextInt(1, parent1.chromosome.size() + 1);
+      randomParent2 = ThreadLocalRandom.current().nextInt(1, parent2.chromosome.size() + 1);
+    }
+    // int randomParent1 = ThreadLocalRandom.current().nextInt(1, parent1.chromosome.size() + 1);
+    // int randomParent2 = ThreadLocalRandom.current().nextInt(1, parent2.chromosome.size() + 1);
 
-    this.chromosome = new ArrayList<>();
+    chromosome = new ArrayList<>();
 
     for (int i = 0; i < randomParent1; i++) {
-      this.chromosome.add(parent1.chromosome.get(i));
+      chromosome.add(parent1.chromosome.get(i));
       if (doesMutate((float) m)) {
         this.chromosome.set(i, randomLetter(5));
       }
     }
 
-    for (int i = randomParent2; i < randomParent2; i++) {
+    for (int i = 0; i < randomParent2; i++) {
       this.chromosome.add((parent2.chromosome.get(i)));
       if (doesMutate((float) m)) {
         this.chromosome.set(i, randomLetter(5));
       }
     }
 
-    for (int i = 0; i < chromosome.size(); i++) {
-      if (chromosome.size() > c_max) {
-        chromosome.remove(chromosome.size() - 1);
-      }
+    while(chromosome.size() >= c_max) {
+      chromosome.remove(chromosome.size() - 1);
     }
   }
 
