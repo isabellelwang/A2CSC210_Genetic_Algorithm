@@ -1,4 +1,4 @@
-# A2 Genetic Algorithms
+# A2 Genetic Algorithms - ArrayLists
 
 # Your readme should include the following information. Each student needs to submit all of this information themselves, even when pair programming. 
 
